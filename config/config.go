@@ -34,16 +34,6 @@ var Config = struct {
 		Bucket    string `yaml:"bucket"`
 		Domain    string `yaml:"domain"`
 	}
-	App struct {
-		AppID     string `yaml:"appID"`
-		AppSecret string `yaml:"appSecret"`
-		MchID     string `yaml:"mchId"`
-		Key       string `yaml:"key"`
-	}
-	Yzy struct {
-		ClientID string `yaml:"clientID"`
-		Appkey   string `yaml:"appkey"`
-	}
 }{}
 
 func init() {

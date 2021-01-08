@@ -1,7 +1,8 @@
 package db
 
 import (
-	"mango-api/config"
+	"job-api/config"
+
 	"github.com/go-redis/redis"
 )
 

@@ -1,15 +1,16 @@
 package utils
 
 import (
+	"reflect"
+
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	zh_translations "github.com/go-playground/validator/translations/zh"
 	"gopkg.in/go-playground/validator.v9"
-	"reflect"
 )
 
 // Trans 语法校验
-func Trans(data interface{}) *string {
+func (_ Utils) Trans(data interface{}) *string {
 	//验证
 	str := ""
 	zh_ch := zh.New()
@@ -25,8 +26,12 @@ func Trans(data interface{}) *string {
 
 	err := validate.Struct(data)
 	if err != nil {
-		for _, err := range err.(validator.ValidationErrors) {
-			str += err.Translate(trans) + "\n"
+		for k, e := range err.(validator.ValidationErrors) {
+			tag := "，"
+			if k == len(err.(validator.ValidationErrors))-1 {
+				tag = "。"
+			}
+			str += e.Translate(trans) + tag
 		}
 		return &str
 	}

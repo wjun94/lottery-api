@@ -1,23 +1,20 @@
 db:
   user: root
-  base: mango
+  base: job
   password: 19941121
 redis:
   addr: localhost:6379
   password: 19941121
   base: 0
 route:
-  pathPrefix: /api/v2
+  pathPrefix: /api/v1
 qiniu:
   accessKey: gtWDWfb8YvTS0v03ukKUYnetbcUgorUNgrgbqkYV
   secretKey: dmaJHu9TqaYvYtd3-Qdijt7y7Qqa_z3T8LqkQqz-
-  bucket: quyin-test
+  bucket: quyin-test11
   domain: http://www.cnicu.cn
 app:
   appID: wx7fbd583ad61a6517 # 小程序id
   appSecret: f6b9007eb040aa32c1bdf90a2910ae90 # 密钥
   mchId: 1572540531 # 商户id
   key: fw95h234096e09670924mjve5w1040gd # 密钥
-yzy:
-  clientID: APIQM
-  appkey: qianmo2020

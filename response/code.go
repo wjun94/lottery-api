@@ -1,14 +1,12 @@
 package response
 
 // ErrorCode 错误码
-var ErrorCode = map[int]string{
+var ErrorCode = map[uint16]string{
 	200:  "success",
-	304:  "请先登入",
-	500:  "服务器异常，请稍后重试",
-	504:  "图片上传失败",
-	1001: "缺少参数",                              // 缺少参数
-	1002: "mobile number has been registered", // 手机号已被注册
-	1003: "mailbox has been registered",       // 邮箱已被注册
-	1004: "username has been registered",      // 用户名已被注册
-	1005: "password is empty",                 // 用户名已被注册
+	304:  "请重新登入",                                   // 没有权限
+	501:  "请填写完整",                                   // 缺少字段
+	204:  "没有查询到数据",                                 // 没有查询到数据
+	505:  "账号或密码错误",                                 // 没有查询到数据
+	1062: "已注册",                                     // 已注册
+	1364: "Field 'id' doesn't have a default value", // 缺少id
 }

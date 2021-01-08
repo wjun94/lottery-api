@@ -7,7 +7,7 @@ package main
  * 描述信息：入口文件
  */
 import (
-	"mango-api/app"
+	"job-api/app"
 )
 
 func main() {

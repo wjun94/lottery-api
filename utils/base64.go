@@ -21,13 +21,13 @@ func base64Decode(src []byte) ([]byte, error) {
 }
 
 // Encrypt 加密
-func Encrypt(str string) string {
+func (this *Utils) Encrypt(str string) string {
 	debyte := base64Encode([]byte(str))
 	return string(debyte)
 }
 
 // Decrypt 解密
-func Decrypt(str string) string {
+func (this *Utils) Decrypt(str string) string {
 	enbyte, err := base64Decode([]byte(str))
 	if err != nil {
 		fmt.Println(err.Error())

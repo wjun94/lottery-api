@@ -7,153 +7,94 @@ package app
  * 描述信息：路由
  */
 import (
-	"context"
-	"encoding/json"
-	"mango-api/config"
-	"mango-api/db"
-	"mango-api/handler"
-	"mango-api/response"
-	"mango-api/utils"
-	"net/http"
+	"job-api/config"
+	"job-api/controller"
+	"job-api/db"
+	"job-api/service"
+	"job-api/utils"
 
-	"github.com/gorilla/mux"
-	_ "github.com/rs/cors"
+	"github.com/gin-gonic/gin"
 )
+
+var Utils = new(utils.Utils)
 
 // InitApp 初始化
 func InitApp() {
-	println("version: 0.1.6")
-	router := mux.NewRouter()
-	r := router.PathPrefix(config.Config.Route.PathPrefix).Subrouter()
-	r.HandleFunc("/wxLogin", handler.LoginWxHandler).Methods("POST")
-	r.HandleFunc("/createWxUser", handler.CreateWxUser).Methods("POST")
-	r.HandleFunc("/getOpenID", handler.GetOpenID).Methods("POST")
-	r.HandleFunc("/getAllCommodity", handler.GetAllCommodity).Methods("GET")
-	r.HandleFunc("/getCommodityList", handler.GetCommodityList).Methods("GET")
-	r.HandleFunc("/getRelatedCommodity", handler.GetRelatedCommodity).Methods("GET")
-	r.HandleFunc("/getCouponByID", handler.GetCouponByID).Methods("GET")
-	r.HandleFunc("/loginAdmin", handler.LoginAdminHandler).Methods("POST")
-	r.HandleFunc("/getCommodityAd", handler.GetCommodityAdByID).Methods("GET")
-	r.HandleFunc("/getPromote", handler.GetPromote).Methods("GET")
-	r.HandleFunc("/getComment", handler.GetComment).Methods("GET")
-	r.HandleFunc("/getPromoteByLinkId", handler.GetPromoteByLinkID).Methods("GET")
-
-	admin := r.PathPrefix("").Subrouter()
-	wx := r.PathPrefix("").Subrouter()
+	println("version:0.0.3")
+	r := gin.Default()
+	v := r.Group(config.Config.Route.PathPrefix)
+	v.POST("/login", controller.Login)
+	v.POST("/regist", controller.Regist)
+	v.POST("/registCompany", controller.RegistComp)
+	v.POST("/loginCompany", controller.LoginCompany)
 	{
-		wx.HandleFunc("/addAddress", handler.AddAddress).Methods("POST")
-		wx.HandleFunc("/getAllAddress", handler.GetAllAddress).Methods("GET")
-		wx.HandleFunc("/updateAddress", handler.UpdateAddress).Methods("POST")
-		wx.HandleFunc("/deleteAddress", handler.DeleteAddress).Methods("POST")
-		wx.HandleFunc("/updateOrderAddress", handler.UpdateOrderAddress).Methods("POST")
+		v.GET("/listRcrtByComp", controller.ListRcrtByComp)
+		v.GET("/rcrtDetail", controller.RcrtDetail)
+	}
+	v.Use(Middleware()) // 下面需要token认证
+	v.DELETE("/loginout", controller.Loginout)
+	// 求职者官网
+	{
+		v.POST("/createUInfo", controller.CreateUInfo)
+		v.PATCH("/updateUInfo", controller.UpdateUInfo)
+		v.GET("/getUInfo", controller.SelectUInfo)
 	}
 	{
-		wx.HandleFunc("/createOrder", handler.CreateOrder).Methods("POST")
-		wx.HandleFunc("/getWeappOrderList", handler.GetWeappOrderList).Methods("GET")
-		wx.HandleFunc("/getOrderDetails", handler.GetOrderDetails).Methods("GET")
-		wx.HandleFunc("/updateOrder", handler.UpdateOrder).Methods("POST")
-		wx.HandleFunc("/wxPay", handler.WxPay).Methods("POST")
-	}
-
-	{
-		wx.HandleFunc("/deleteCoupon", handler.DeleteCoupon).Methods("POST")
-		wx.HandleFunc("/getAllUserCoupon", handler.GetAllUserCoupon).Methods("GET")
-		wx.HandleFunc("/createUserCoupon", handler.CreateUserCoupon).Methods("POST")
-		wx.HandleFunc("/getCommodityUserCouponById", handler.GetCommodityUserCouponByID).Methods("GET")
+		v.POST("/createIntention", controller.CreateIntention)
+		v.GET("/getIntention", controller.SelectIntention)
+		v.PATCH("/updateIntention", controller.UpdateIntention)
 	}
 	{
-		wx.HandleFunc("/createComment", handler.CreateComment).Methods("POST")
-		r.HandleFunc("/getCommodityComments", handler.GetCommodityComments).Methods("GET")
+		v.POST("/createWork", controller.CreateWork)
+	}
+	// 企业网站官网
+	{
+		v.POST("/createRecruit", controller.CreateRecruit)
+		v.GET("/listRecruit", controller.ListRecruit)
+		v.GET("/getRecruit", controller.SelectRecruit)
+		v.PATCH("/updateRecruit", controller.UpdateRecruit)
+		v.PATCH("/updateRecruits", controller.UpdateRecruits)
+		v.DELETE("/deleteRecruit", controller.DeleteRecruit)
 	}
 	{
-		admin.HandleFunc("/getOrder", handler.GetOrder).Methods("GET")
+		v.POST("/createMsg", controller.CreateMsg)
+		v.GET("/listMsg", controller.ListMsg)
 	}
 	{
-		admin.HandleFunc("/getAllCoupon", handler.GetAllCoupon).Methods("GET")
-		admin.HandleFunc("/addCoupon", handler.AddCoupon).Methods("POST")
-		admin.HandleFunc("/updateCoupon", handler.UpdateCoupon).Methods("POST")
-		admin.HandleFunc("/deleteCoupon", handler.DeleteCoupon).Methods("POST")
+		v.PATCH("/updatePwd", controller.UpdatePwd)
+		v.GET("/companyInfo", controller.CompanyInfo)
+		v.PATCH("/updateCompanyInfo", controller.UpdateCompanyInfo)
 	}
 	{
-		admin.HandleFunc("/createLink", handler.CreateLink).Methods("POST")
-		admin.HandleFunc("/getAllLink", handler.GetAllLink).Methods("GET")
-		admin.HandleFunc("/getLink", handler.SelectLink).Methods("GET")
-		admin.HandleFunc("/deleteLink", handler.DeleteLink).Methods("POST")
-		admin.HandleFunc("/updateLink", handler.UpdateLink).Methods("POST")
+		v.GET("/listLoginLog", controller.ListLoginLog)
 	}
 	{
-		admin.HandleFunc("/createPromote", handler.CreatePromote).Methods("POST")
-		admin.HandleFunc("/updatePromote", handler.UpdatePromote).Methods("POST")
-		admin.HandleFunc("/deletePromote", handler.DeletePromote).Methods("POST")
+		v.GET("/detail", controller.Detail)
 	}
-	{
-		admin.HandleFunc("/addCommodity", handler.AddCommodity).Methods("POST")
-		admin.HandleFunc("/updateCommodity", handler.UpdateCommodity).Methods("POST")
-		admin.HandleFunc("/deleteCommodity", handler.DeleteCommodity).Methods("POST")
-	}
-	{
-		admin.HandleFunc("/getAllAccount", handler.GetAllAccount).Methods("GET")
-		admin.HandleFunc("/updateAccount", handler.UpdateAccount).Methods("POST")
-		admin.HandleFunc("/addAccount", handler.AddAccount).Methods("POST")
-		admin.HandleFunc("/deleteAccount", handler.DeleteAccount).Methods("POST")
-	}
-	wx.HandleFunc("/upload", handler.UploadFile).Methods("POST") // 上传图片
-	wx.HandleFunc("/deleteUserCoupon", handler.DeleteUserCoupon).Methods("POST")
-	admin.HandleFunc("/getUserInfo", handler.GetUserInfo).Methods("GET")
-	admin.HandleFunc("/getAuth", handler.GetAuth).Methods("GET")
-
-	admin.Use(adminMiddleware)
-	wx.Use(wxMiddleware)
-	// handler := cors.Default().Handler(r)
-	// handler := cors.New(cors.Options{
-	// 	AllowedOrigins:   []string{"*"},
-	// 	AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	// 	AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-	// 	ExposedHeaders:   []string{"Link"},
-	// 	AllowCredentials: true,
-	// 	MaxAge:           300, // Maximum value not ignored by any of major browsers
-	// }).Handler(r)
-	http.ListenAndServe(":8080", r)
+	r.Run()
 }
 
-// adminMiddleware 后台中间件
-func adminMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// 检验token
-		tokenStr := r.Header.Get("authorization")
-		loginUserID, level := utils.GetUserID(tokenStr)
+// Middleware 中间件
+func Middleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tokenStr := c.Request.Header.Get("Authorization")
+		loginUserID, level := Utils.GetUserID(tokenStr)
 		rd, _ := db.RedisInit().Get(loginUserID).Result()
-		if tokenStr == "" || loginUserID == "" {
-			response, _ := json.Marshal(response.JSONErrorCode(304))
-			w.Write(response)
+		var uService = new(service.UserService)
+		_, err := uService.Select(loginUserID)
+		if tokenStr == "" || loginUserID == "" || err != nil {
+			c.JSON(401, gin.H{"message": "请重新登入"})
+			c.Abort()
 		} else if rd != tokenStr {
-			response, _ := json.Marshal(response.JSONErrorCode(304))
-			w.Write(response)
+			c.Abort()
+			c.JSON(401, gin.H{"message": "请重新登入"})
 		} else {
-			ctx := context.WithValue(r.Context(), "info", map[string]interface{}{"Type": level, "UserID": loginUserID})
-			r = r.WithContext(ctx)
-			next.ServeHTTP(w, r)
+			// context.WithValue(c, "info", map[string]string{"UserID": loginUserID})
+			c.Set("userInfo", struct {
+				UserID string
+				Level  byte
+			}{loginUserID, level})
+			c.Next()
 		}
-	})
-}
-
-// wxMiddleware 微信中间件
-func wxMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// 检验token
-		tokenStr := r.Header.Get("authorization")
-		id := utils.GetWxID(tokenStr)
-		rd, _ := db.RedisInit().Get(id).Result()
-		if tokenStr == "" || id == "" {
-			response, _ := json.Marshal(response.JSONErrorCode(304))
-			w.Write(response)
-		} else if rd != tokenStr {
-			response, _ := json.Marshal(response.JSONErrorCode(304))
-			w.Write(response)
-		} else {
-			ctx := context.WithValue(r.Context(), "info", map[string]string{"UserID": id})
-			r = r.WithContext(ctx)
-			next.ServeHTTP(w, r)
-		}
-	})
+	}
 }
