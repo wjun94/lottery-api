@@ -1,0 +1,32 @@
+version: "2"
+services:
+  # redis:
+  #   image: redis
+  #   container_name: mongoredis
+  #   command: redis-server --requirepass 19941121
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - "./data:/usr/local/var/db/redis"
+
+  mysql:
+    container_name: jobmysql
+    image: mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=19941121
+    volumes:
+      - ./mysql:/usr/local/var/mysql
+# networks:
+#   front:
+#     # Use a custom driver
+#     driver: custom-driver-1
+#   back:
+#     # Use a custom driver which takes special options
+#     driver: custom-driver-2
+#     driver_opts:
+#       foo: "1"
+#       bar: "2"
