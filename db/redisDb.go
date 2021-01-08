@@ -1,7 +1,7 @@
 package db
 
 import (
-	"job-api/config"
+	"lottery-api/config"
 
 	"github.com/go-redis/redis"
 )

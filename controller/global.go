@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"job-api/utils"
+	"lottery-api/utils"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

@@ -1,8 +1,8 @@
 package response
 
 import (
-	"job-api/model"
-	"job-api/utils"
+	"lottery-api/model"
+	"lottery-api/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

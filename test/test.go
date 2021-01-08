@@ -1,7 +1,7 @@
 package main
 
 import (
-	"job-api/utils"
+	"lottery-api/utils"
 )
 
 var Utils = new(utils.Utils)

@@ -7,7 +7,7 @@ package main
  * 描述信息：入口文件
  */
 import (
-	"job-api/app"
+	"lottery-api/app"
 )
 
 func main() {

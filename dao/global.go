@@ -1,10 +1,10 @@
 package dao
 
 import (
-	"job-api/config"
-	"job-api/db"
-	"job-api/model"
-	"job-api/utils"
+	"lottery-api/config"
+	"lottery-api/db"
+	"lottery-api/model"
+	"lottery-api/utils"
 	"regexp"
 	"strings"
 

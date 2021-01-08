@@ -10,8 +10,8 @@ import (
 	"fmt"
 	"log"
 
-	"job-api/config"
-	"job-api/model"
+	"lottery-api/config"
+	"lottery-api/model"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -50,32 +50,13 @@ func create(models interface{}) {
 	DB.AutoMigrate(models)
 	if !DB.HasTable(models) {
 		DB.CreateTable(models)
+
 	}
 }
 
 // CreateTables 初始化表
 func CreateTables() {
+	// user := model.User{ID: "1", Level: 1, Phone: "13588227124", Pwd: "123456"}
+	// DB.Create(&user)
 	create(&model.User{})
-	create(&model.Recruit{})
-	create(&model.CInfo{})
-	create(&model.LoginLog{})
-	create(&model.Bills{})
-	create(&model.Resume{})
-	create(&model.UInfo{})
-	create(&model.Cert{})
-	create(&model.Educate{})
-	create(&model.Msg{})
-	create(&model.Intention{})
-	create(&model.Work{})
-	DB.Model(&model.CInfo{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.LoginLog{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.Bills{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.Resume{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.UInfo{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.Recruit{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.Cert{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.Educate{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.Msg{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.Work{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-	DB.Model(&model.Intention{}).AddForeignKey("id", "users(id)", "RESTRICT", "RESTRICT")
 }

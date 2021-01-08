@@ -15,8 +15,8 @@ type CustomClaims struct {
 var expireTime = 60 * 24 * 15 // 过期时间15天
 var key = []byte("adfadf!@#2")
 
-// Create 创建token
-func (this *Utils) Create(userId string, level byte) string {
+// CreateToken 创建token
+func (this *Utils) CreateToken(userId string, level byte) string {
 	claims := CustomClaims{
 		userId, level, jwt.StandardClaims{
 			IssuedAt:  time.Now().Unix(),

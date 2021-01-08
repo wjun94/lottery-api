@@ -1,4 +1,4 @@
-module job-api
+module lottery-api
 
 go 1.13
 

@@ -1,13 +1,13 @@
 db:
   user: root
-  base: job
+  base: house
   password: 19941121
 redis:
   addr: localhost:6379
   password: 19941121
   base: 0
 route:
-  pathPrefix: /api/v1
+  pathPrefix: /api/v3
 qiniu:
   accessKey: gtWDWfb8YvTS0v03ukKUYnetbcUgorUNgrgbqkYV
   secretKey: dmaJHu9TqaYvYtd3-Qdijt7y7Qqa_z3T8LqkQqz-
