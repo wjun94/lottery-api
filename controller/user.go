@@ -32,3 +32,14 @@ func Login(c *gin.Context) {
 	db.RedisInit().Set(us.ID, token, 60*24*15*60*time.Second)
 	response.ResultJSON(c, token)
 }
+
+// Loginout 退出登录
+func Loginout(c *gin.Context) {
+	userInfo, _ := c.Get("userInfo")
+	info := userInfo.(struct {
+		UserID string
+		Level  byte
+	})
+	db.RedisInit().Del(info.UserID)
+	response.ResultSuccess(c)
+}

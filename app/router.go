@@ -23,7 +23,7 @@ func InitApp() {
 	v.POST("/login", controller.Login)
 
 	v.Use(Middleware()) // 下面需要token认证
-	// v.DELETE("/loginout", controller.Loginout)
+	v.DELETE("/loginout", controller.Loginout)
 	r.Run()
 }
 
