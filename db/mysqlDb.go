@@ -59,4 +59,7 @@ func CreateTables() {
 	// user := model.User{ID: "1", Level: 1, Phone: "13588227124", Pwd: "123456"}
 	// DB.Create(&user)
 	create(&model.User{})
+	create(&model.Lottery{})
+	create(&model.Publicity{})
+	create(&model.Rank{})
 }

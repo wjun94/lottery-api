@@ -24,7 +24,10 @@ func InitApp() {
 
 	v.Use(Middleware()) // 下面需要token认证
 	v.DELETE("/loginout", controller.Loginout)
-	r.Run()
+	{
+		v.GET("/lotteryList", controller.LotteryList)
+	}
+	r.Run(":7001")
 }
 
 // Middleware 中间件
