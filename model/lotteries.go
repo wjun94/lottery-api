@@ -20,3 +20,11 @@ type Lottery struct {
 	UTyp      string `form:"uTyp" gorm:"type:longtext" json:"uTyp" label:"户型图"`
 	Claim     string `form:"claim" json:"claim" label:"要求(存款证明)"`
 }
+
+// SelectLotList 搜索列表参数
+type SelectLotList struct {
+	Name   string `form:"name"`
+	Status string `form:"status"`
+	StarAt string `form:"starAt"`
+	EndAt  string `form:"endAt"`
+}

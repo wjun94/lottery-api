@@ -2,7 +2,15 @@
 
 ** user表 **
 level 等级划分
-1:老板
+1:管理员
 2:业务员
-3:企业用户	关联表->company(公司信息)
-4:求职用户  关联表->uInfo(用户信息)
+
+## GET请求
+```go
+type SelectLotList struct {
+	Name   string `form:"name"` // 需要form
+}
+
+var selectLotList model.SelectLotList
+c.ShouldBind(&selectLotList)
+```

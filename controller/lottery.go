@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"fmt"
+	"lottery-api/model"
 	"lottery-api/response"
 	"lottery-api/service"
 
@@ -12,7 +14,10 @@ var lotteryService = new(service.LotteryService)
 // LotteryList 房价后台列表
 func LotteryList(c *gin.Context) {
 	current, pageSize := GetPageParams(c)
-	res, count, err := lotteryService.SelectList(current, pageSize)
+	var selectLotList model.SelectLotList
+	c.ShouldBind(&selectLotList)
+	fmt.Println(selectLotList)
+	res, count, err := lotteryService.SelectList(selectLotList, current, pageSize)
 	if err != nil {
 		response.ResultSQLError(c, err.Number, err.Message)
 		return
